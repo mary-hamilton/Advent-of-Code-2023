@@ -4,11 +4,7 @@ const input = fs.readFileSync('Day3Input.txt', 'utf8');
 const lineArray = input.split('\n');
 let answer = 0;
 
-// Think I need to deal with each line, pull the numbers and their indices including the preceding and following indices
-// Then take the next line and check if there are any symbols in those index slots, and if so, add the corresponding number to the answer
-// Then proceed again but with the next line as the intial line
-// But I need to check for adjaecnt symbls on the same line, and I need to nt count numbers twice if they're
-// Adjacent to more than one symbol. Replace them with dots once counted?
+// DOES NOT WORK YET
 
 const isSymbol = (char) => {
     return (/[^\d\.]/).test(char);
