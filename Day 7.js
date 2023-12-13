@@ -33,9 +33,7 @@ const part1Converter = {
 }
 
 const parseInput = (array) => {
-    return array.map((line) => {
-        return line.split(" ");
-    });
+    return array.map((line) => line.split(" "));
 }
 
 const tallyCards = (line) => {

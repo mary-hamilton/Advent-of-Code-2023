@@ -11,13 +11,13 @@ const parseInput = () => {
         myMap.set(key, [left, right]);
     }
 }
+parseInput();
 
-const getMoves = () => {
-    parseInput();
+const getMoves = (node) => {
     let steps = 0;
-    let value = myMap.get("AAA");
-    let nextKey;
-    while (nextKey !== "ZZZ") {
+    let value = myMap.get(node);
+    let nextKey = node;
+    while (nextKey[2] !== "Z") {
         const nextMovement = movementArray[steps % movementArray.length];
         if (nextMovement === "R") {
             nextKey = value[1];
@@ -32,7 +32,7 @@ const getMoves = () => {
 }
 
 //------------ Part 2 ---------
-// Brute force, does not work!
+
 const getThreadKeys = () => {
     const keys = myMap.keys()
     let threadKeys = [];
@@ -43,35 +43,30 @@ const getThreadKeys = () => {
     }
     return threadKeys;
 }
-const moveThread = (threadID, nextMovement, value, threadValues, endsInZ) => {
-    let nextKey;
-    endsInZ[threadID] = false;
-    if (nextMovement === "R") {
-        nextKey = value[1];
+
+const getThreadMoves = () => {
+    const threadKeys = getThreadKeys()
+    let moveTotals = [];
+    while (moveTotals.length < threadKeys.length) {
+        threadKeys.forEach((threadValue, i) => {
+            moveTotals[i] = getMoves(threadValue);
+        })
     }
-    if (nextMovement === "L") {
-        nextKey = value[0];
-    }
-    if (nextKey[2] === "Z") {
-        endsInZ[threadID] = true;
-    }
-    threadValues[threadID] = myMap.get(nextKey);
+    return moveTotals;
 }
 
-const getMovesPart2 = () => {
-    parseInput();
-    let steps = 0;
-    let threadValues = getThreadKeys().map((key) => {
-        return myMap.get(key);
-    });
-    let endsInZ = [ false ];
-    while (!endsInZ.every(e => e)) {
-        const nextMovement = movementArray[steps % movementArray.length];
-        threadValues.forEach((threadValue, i) => {
-            return moveThread(i, nextMovement, threadValue, threadValues, endsInZ);
-        })
-        steps++
+const getLowestCommonMultiple = () => {
+    const moveTotals = getThreadMoves();
+    const getGreatestCommonDivisor = (a, b) => {
+        return a ? getGreatestCommonDivisor(b % a, a) : b;
     }
-    return steps;
+    return moveTotals.reduce((acc, el) => {
+        return (acc * el) / getGreatestCommonDivisor(acc, el)
+    })
 }
+
+const answer = getLowestCommonMultiple();
+console.log(answer)
+
+
 
